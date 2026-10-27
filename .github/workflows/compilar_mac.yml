@@ -21,7 +21,7 @@ jobs:
     - name: Instalar librerías
       run: |
         python3 -m pip install --upgrade pip
-        pip install pandas openpyxl pyinstaller
+        pip install pandas openpyxl pyinstaller pillow
 
     - name: Compilar con PyInstaller
       run: |
