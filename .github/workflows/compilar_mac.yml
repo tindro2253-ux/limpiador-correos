@@ -1,0 +1,39 @@
+name: Compilar Executable para Mac
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ "main", "master" ]
+
+jobs:
+  build-macos:
+    runs-on: macos-latest
+
+    steps:
+    - name: Obtener código fuente
+      uses: actions/checkout@v4
+
+    - name: Configurar Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Instalar librerías
+      run: |
+        python3 -m pip install --upgrade pip
+        pip install pandas openpyxl pyinstaller
+
+    - name: Compilar con PyInstaller
+      run: |
+        pyinstaller --windowed --onefile --add-data "icono.ico:." --icon=icono.ico --name "LimpiadorCorreos" app.py
+
+    - name: Empaquetar en .zip
+      run: |
+        cd dist
+        zip -r ../LimpiadorCorreos-Mac.zip .
+
+    - name: Subir ejecutable compilado
+      uses: actions/upload-artifact@v4
+      with:
+        name: Aplicacion-Mac
+        path: LimpiadorCorreos-Mac.zip
